@@ -62,4 +62,13 @@ async function requireSupervisor(request, reply) {
   }
 }
 
-module.exports = { authenticate, requireAdmin, requireSupervisor }
+/**
+ * Garante que o usuário é super_admin (AgentIA).
+ */
+async function requireSuperAdmin(request, reply) {
+  if (!request.user?.super_admin) {
+    return reply.code(403).send({ error: 'Acesso restrito a super admins (AgentIA)' })
+  }
+}
+
+module.exports = { authenticate, requireAdmin, requireSupervisor, requireSuperAdmin }

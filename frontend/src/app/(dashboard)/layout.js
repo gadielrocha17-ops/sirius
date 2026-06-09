@@ -35,28 +35,27 @@ export default function DashboardLayout({ children }) {
   if (loading) {
     return (
       <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
-        <div style={{ color: 'var(--text3)', fontSize: 13 }}>Carregando…</div>
+        <div style={{ color: 'var(--text3)', fontSize: 13 }}>Carregando...</div>
       </div>
     )
   }
   if (!user) return null
 
   const navItems = [
-    { href: '/atendimento', icon: '💬', label: 'Atendimento' },
+    { href: '/atendimento', icon: 'chat', label: 'Atendimento' },
     ...(user.can_see_bot_queue || user.role !== 'agent'
-      ? [{ href: '/fila-bot', icon: '🤖', label: 'Fila do Bot' }] : []),
-    { href: '/agenda', icon: '📅', label: 'Agenda' },
-    { href: '/itens', icon: '📦', label: 'Itens' },
+      ? [{ href: '/fila-bot', icon: 'bot', label: 'Fila do Bot' }] : []),
+    { href: '/agenda', icon: 'cal', label: 'Agenda' },
+    { href: '/itens', icon: 'box', label: 'Itens' },
     ...(user.role !== 'agent'
-      ? [{ href: '/admin', icon: '👥', label: 'Admin' }] : []),
-    { href: '/configuracoes', icon: '⚙️', label: 'Config', adminOnly: true },
+      ? [{ href: '/admin', icon: 'team', label: 'Admin' }] : []),
+    { href: '/configuracoes', icon: 'cfg', label: 'Config', adminOnly: true },
     ...(user.super_admin
-      ? [{ href: '/superadmin', icon: '🌐', label: 'AgentIA' }] : []),
+      ? [{ href: '/superadmin', icon: 'globe', label: 'AgentIA' }] : []),
   ].filter(item => !item.adminOnly || user.role === 'admin')
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
-      {/* TOP NAV */}
       <nav style={{ height: 48, background: 'var(--bg2)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', padding: '0 16px', gap: 6, flexShrink: 0, zIndex: 100 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginRight: 12 }}>
           <SiriusLogo size={26} />
@@ -70,13 +69,13 @@ export default function DashboardLayout({ children }) {
               borderColor: pathname.startsWith(item.href) ? 'var(--brand)' : 'var(--border)',
               background: pathname.startsWith(item.href) ? 'var(--brand)' : 'var(--bg2)',
               color: pathname.startsWith(item.href) ? '#fff' : 'var(--text2)' }}>
-            {item.icon} {item.label}
+            {item.label}
           </button>
         ))}
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
           <button onClick={toggleTheme}
             style={{ padding: '5px 10px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg2)', cursor: 'pointer', fontSize: 14 }}>
-            {theme === 'light' ? '🌙' : '☀️'}
+            {theme === 'light' ? 'Escuro' : 'Claro'}
           </button>
           <div style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '4px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg2)' }}>
             <div style={{ width: 24, height: 24, borderRadius: '50%', background: user.avatar_color || 'var(--brand)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700 }}>
@@ -88,7 +87,6 @@ export default function DashboardLayout({ children }) {
         </div>
       </nav>
 
-      {/* CONTENT */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
         {children}
       </div>
@@ -109,7 +107,7 @@ function SiriusLogo({ size = 28 }) {
       </defs>
       <path d="M14 2C14 2 15.2 10 22 14C15.2 18 14 26 14 26C14 26 12.8 18 6 14C12.8 10 14 2 14 2Z" fill="url(#lgnav)" filter="url(#gnav)"/>
       <circle cx="20" cy="5" r="1.2" fill="#7dd3fc" opacity="0.9"/>
-          <circle cx="14" cy="14" r="2.5" fill="white" opacity="0.95" filter="url(#gnav)"/>
+      <circle cx="14" cy="14" r="2.5" fill="white" opacity="0.95" filter="url(#gnav)"/>
     </svg>
-    )
+  )
 }

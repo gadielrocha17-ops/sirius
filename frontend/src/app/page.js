@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import { getSupabase } from '../lib/supabase'
 import { useRouter } from 'next/navigation'
+import { useUser } from '../hooks/useUser'
+import { api } from '../lib/api'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -13,18 +15,28 @@ export default function LoginPage() {
   const [forgotSent, setForgotSent] = useState(false)
   const [forgotLoading, setForgotLoading] = useState(false)
   const router = useRouter()
+  const { setUser } = useUser()
 
   async function handleLogin(e) {
     e.preventDefault()
     setLoading(true)
     setError('')
     const supabase = getSupabase()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    if (authError) {
       setError('E-mail ou senha inválidos. Tente novamente.')
       setLoading(false)
-    } else {
+      return
+    }
+    // Carrega o perfil antes de navegar para evitar race condition no UserProvider
+    try {
+      const profile = await api.users.me()
+      setUser(profile)
       router.push('/atendimento')
+    } catch {
+      setError('Conta não cadastrada no sistema. Contate o administrador.')
+      await getSupabase().auth.signOut()
+      setLoading(false)
     }
   }
 
@@ -33,7 +45,7 @@ export default function LoginPage() {
     setForgotLoading(true)
     const supabase = getSupabase()
     await supabase.auth.resetPasswordForEmail(forgotEmail, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: window.location.origin + '/reset-password',
     })
     setForgotLoading(false)
     setForgotSent(true)
@@ -53,7 +65,6 @@ export default function LoginPage() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
       <div style={{ width: 380, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 16, padding: 36, boxShadow: '0 4px 24px rgba(0,0,0,.07)' }}>
-        {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
           <SiriusLogo size={32} />
           <span style={{ fontSize: 22, fontWeight: 800, background: 'linear-gradient(100deg,#3a2db5,#5B4FF5,#9B8CFF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
@@ -75,7 +86,7 @@ export default function LoginPage() {
               <div style={{ marginBottom: 8 }}>
                 <label style={labelStyle}>Senha</label>
                 <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
-                  placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022" style={inputStyle} />
+                  placeholder="senha" style={inputStyle} />
               </div>
 
               <div style={{ textAlign: 'right', marginBottom: 18 }}>
@@ -93,7 +104,7 @@ export default function LoginPage() {
 
               <button type="submit" disabled={loading}
                 style={{ width: '100%', padding: 10, background: loading ? 'var(--border2)' : 'var(--brand)', color: '#fff', border: 'none', borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>
-                {loading ? 'Entrando\u2026' : 'Entrar'}
+                {loading ? 'Entrando...' : 'Entrar'}
               </button>
             </form>
           </>
@@ -106,7 +117,7 @@ export default function LoginPage() {
 
             {forgotSent ? (
               <div style={{ background: '#d1fae5', border: '1px solid #6ee7b7', borderRadius: 8, padding: '12px 14px', fontSize: 13, color: '#065f46', marginBottom: 20 }}>
-                \u2705 Link enviado! Verifique sua caixa de entrada.
+                Link enviado! Verifique sua caixa de entrada.
               </div>
             ) : (
               <form onSubmit={handleForgotPassword}>
@@ -117,14 +128,14 @@ export default function LoginPage() {
                 </div>
                 <button type="submit" disabled={forgotLoading}
                   style={{ width: '100%', padding: 10, background: forgotLoading ? 'var(--border2)' : 'var(--brand)', color: '#fff', border: 'none', borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: forgotLoading ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>
-                  {forgotLoading ? 'Enviando\u2026' : 'Enviar link'}
+                  {forgotLoading ? 'Enviando...' : 'Enviar link'}
                 </button>
               </form>
             )}
 
             <button onClick={() => { setView('login'); setForgotSent(false); setForgotEmail('') }}
               style={{ background: 'none', border: 'none', color: 'var(--text3)', fontSize: 12, cursor: 'pointer', marginTop: 16, padding: 0, fontFamily: 'inherit' }}>
-              \u2190 Voltar ao login
+              Voltar ao login
             </button>
           </>
         )}

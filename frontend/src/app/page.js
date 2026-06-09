@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { getSupabase } from '../lib/supabase'
 import { useRouter } from 'next/navigation'
 import { useUser } from '../hooks/useUser'
-import { api } from '../lib/api'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -22,19 +21,25 @@ export default function LoginPage() {
     setLoading(true)
     setError('')
     const supabase = getSupabase()
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
     if (authError) {
-      setError('E-mail ou senha inválidos. Tente novamente.')
+      setError('E-mail ou senha invalidos. Tente novamente.')
       setLoading(false)
       return
     }
-    // Carrega o perfil antes de navegar para evitar race condition no UserProvider
+    // Usa token direto do signInWithPassword - evita hang no getSession()
+    const token = data.session?.access_token
     try {
-      const profile = await api.users.me()
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://sirius-production-1017.up.railway.app'
+      const res = await fetch(apiUrl + '/users/me', {
+        headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }
+      })
+      if (!res.ok) throw new Error('not found')
+      const profile = await res.json()
       setUser(profile)
       router.push('/atendimento')
     } catch {
-      setError('Conta não cadastrada no sistema. Contate o administrador.')
+      setError('Conta nao cadastrada no sistema. Contate o administrador.')
       await getSupabase().auth.signOut()
       setLoading(false)
     }

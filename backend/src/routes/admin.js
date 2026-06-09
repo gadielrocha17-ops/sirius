@@ -80,7 +80,7 @@ module.exports = async function adminRoutes(fastify) {
   fastify.get('/tenant', async (request, reply) => {
     const { data } = await supabase
       .from('tenants')
-      .select('id, name, slug, plan, timezone, business_hours, welcome_message, out_of_hours_message, whatsapp_number, n8n_webhook_url, active')
+      .select('id, name, slug, plan, timezone, business_hours, human_hours, welcome_message, out_of_hours_message, whatsapp_number, n8n_webhook_url, active')
       .eq('id', request.tenantId)
       .single()
     return data
@@ -89,7 +89,7 @@ module.exports = async function adminRoutes(fastify) {
   // PATCH /admin/tenant — atualiza configurações do tenant
   fastify.patch('/tenant', async (request, reply) => {
     const allowed = [
-      'name', 'timezone', 'business_hours', 'welcome_message',
+      'name', 'timezone', 'business_hours', 'human_hours', 'welcome_message',
       'out_of_hours_message', 'whatsapp_number', 'n8n_webhook_url', 'n8n_webhook_token',
     ]
     const updates = Object.fromEntries(
@@ -132,7 +132,7 @@ module.exports = async function adminRoutes(fastify) {
     return users.map(u => ({
       ...u,
       open_tickets: ticketCount[u.id] || 0,
-      status: ticketCount[u.id] > 0 ? 'attending' : 'online',
+      status: ticketCount[u.id] > 0 ? 'attending' : 'idle',
     }))
   })
 }

@@ -161,7 +161,7 @@ export default function ConfigPage() {
 
       {/* Content */}
       <div style={{ flex: 1, overflowY: 'auto', padding: 24 }}>
-        {!tenant && nav !== 4 && <p style={{ color: 'var(--text3)', fontSize: 13 }}>Carregando…</p>}
+        {!tenant && nav !== 4 && <p style={{ color: 'var(--text3)', fontSize: 13 }}>Carregando...</p>}
 
         {/* 0: Geral */}
         {nav === 0 && tenant && (
@@ -173,16 +173,16 @@ export default function ConfigPage() {
             </Field>
             <Field label="Fuso horário">
               <Select value={tenant.timezone || 'America/Sao_Paulo'} onChange={e => updateTenant('timezone', e.target.value)}>
-                <option value="America/Sao_Paulo">América/São Paulo (GMT-3)</option>
-                <option value="America/Manaus">América/Manaus (GMT-4)</option>
-                <option value="America/Belem">América/Belém (GMT-3)</option>
+                <option value="America/Sao_Paulo">America/Sao Paulo (GMT-3)</option>
+                <option value="America/Manaus">America/Manaus (GMT-4)</option>
+                <option value="America/Belem">America/Belem (GMT-3)</option>
               </Select>
             </Field>
 
             <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: 16, marginBottom: 16 }}>
-              <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>⏰ Horário do Bot</p>
+              <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>Horario do Bot</p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                <Field label="Início">
+                <Field label="Inicio">
                   <Input type="time" value={tenant.business_hours?.start || '08:00'} onChange={e => updateTenant('business_hours', { ...tenant.business_hours, start: e.target.value })} />
                 </Field>
                 <Field label="Fim">
@@ -192,9 +192,9 @@ export default function ConfigPage() {
             </div>
 
             <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: 16, marginBottom: 16 }}>
-              <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>👤 Horário de Atendimento Humano</p>
+              <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>Horario de Atendimento Humano</p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                <Field label="Início">
+                <Field label="Inicio">
                   <Input type="time" value={tenant.human_hours?.start || '08:00'} onChange={e => updateTenant('human_hours', { ...(tenant.human_hours || {}), start: e.target.value })} />
                 </Field>
                 <Field label="Fim">
@@ -206,7 +206,7 @@ export default function ConfigPage() {
             <Field label="Mensagem de boas-vindas">
               <Textarea value={tenant.welcome_message || ''} onChange={e => updateTenant('welcome_message', e.target.value)} />
             </Field>
-            <Field label="Mensagem fora do horário">
+            <Field label="Mensagem fora do horario">
               <Textarea value={tenant.out_of_hours_message || ''} onChange={e => updateTenant('out_of_hours_message', e.target.value)} />
             </Field>
             <SaveBtn onClick={saveTenant} />
@@ -217,14 +217,14 @@ export default function ConfigPage() {
         {nav === 1 && tenant && (
           <>
             <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 3 }}>WhatsApp / N8N</h3>
-            <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 20 }}>Conexão com o N8N e Evolution API</p>
+            <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 20 }}>Conexao com o N8N e Evolution API</p>
             <Field label="URL do Webhook N8N">
               <Input value={tenant.n8n_webhook_url || ''} placeholder="https://n8n.suaempresa.com/webhook/sirius" onChange={e => updateTenant('n8n_webhook_url', e.target.value)} />
             </Field>
-            <Field label="Token de autenticação">
+            <Field label="Token de autenticacao">
               <div style={{ display: 'flex', gap: 8 }}>
-                <Input type={showKey.n8n ? 'text' : 'password'} value={tenant.n8n_webhook_token || ''} placeholder="••••••••••••••••" onChange={e => updateTenant('n8n_webhook_token', e.target.value)} />
-                <button onClick={() => setShowKey(p => ({ ...p, n8n: !p.n8n }))} style={{ padding: '7px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg2)', fontSize: 12, cursor: 'pointer', color: 'var(--text3)', fontFamily: 'inherit', flexShrink: 0 }}>{showKey.n8n ? '🙈' : '👁'}</button>
+                <Input type={showKey.n8n ? 'text' : 'password'} value={tenant.n8n_webhook_token || ''} placeholder="..." onChange={e => updateTenant('n8n_webhook_token', e.target.value)} />
+                <button onClick={() => setShowKey(p => ({ ...p, n8n: !p.n8n }))} style={{ padding: '7px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg2)', fontSize: 12, cursor: 'pointer', color: 'var(--text3)', fontFamily: 'inherit', flexShrink: 0 }}>{showKey.n8n ? 'ocultar' : 'ver'}</button>
               </div>
             </Field>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 20 }}>
@@ -232,7 +232,7 @@ export default function ConfigPage() {
               {n8nIntegration && (
                 <button onClick={() => testIntegration(n8nIntegration.id)}
                   style={{ padding: '9px 14px', border: '1px solid var(--brand)', borderRadius: 8, background: 'var(--bg2)', color: 'var(--brand)', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600, marginTop: 8 }}>
-                  Testar conexão
+                  Testar conexao
                 </button>
               )}
             </div>
@@ -242,7 +242,7 @@ export default function ConfigPage() {
         {/* 2: IA */}
         {nav === 2 && (
           <>
-            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 3 }}>Inteligência Artificial</h3>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 3 }}>Inteligencia Artificial</h3>
             <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 20 }}>Provedor e modelo do agente de IA</p>
             <Field label="Provedor">
               <Select value={aiProvider} onChange={e => { setAiProvider(e.target.value); setAiModel(e.target.value === 'deepseek' ? 'deepseek-chat' : e.target.value === 'openai' ? 'gpt-4o' : 'claude-sonnet-4-6') }}>
@@ -256,11 +256,11 @@ export default function ConfigPage() {
                 {aiProvider === 'anthropic' && <>
                   <option value="claude-sonnet-4-6">claude-sonnet-4-6 (Recomendado)</option>
                   <option value="claude-opus-4-6">claude-opus-4-6 (Mais capaz)</option>
-                  <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 (Mais rápido)</option>
+                  <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 (Mais rapido)</option>
                 </>}
                 {aiProvider === 'openai' && <>
                   <option value="gpt-4o">GPT-4o</option>
-    0             <option value="gpt-4o-mini">GPT-4o Mini</option>
+                  <option value="gpt-4o-mini">GPT-4o Mini</option>
                   <option value="gpt-4-turbo">GPT-4 Turbo</option>
                 </>}
                 {aiProvider === 'deepseek' && <>
@@ -271,14 +271,14 @@ export default function ConfigPage() {
             </Field>
             <Field label="API Key">
               <div style={{ display: 'flex', gap: 8 }}>
-                <Input type={showKey.ai ? 'text' : 'password'} value={aiKey} placeholder={aiIntegration ? '••••••••••••••••' : 'Cole sua API key aqui'} onChange={e => setAiKey(e.target.value)} />
-                <button onClick={() => setShowKey(p => ({ ...p, ai: !p.ai }))} style={{ padding: '7px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg2)', fontSize: 12, cursor: 'pointer', color: 'var(--text3)', fontFamily: 'inherit', flexShrink: 0 }}>{showKey.ai ? '🙈' : '👁'}</button>
+                <Input type={showKey.ai ? 'text' : 'password'} value={aiKey} placeholder={aiIntegration ? '...' : 'Cole sua API key aqui'} onChange={e => setAiKey(e.target.value)} />
+                <button onClick={() => setShowKey(p => ({ ...p, ai: !p.ai }))} style={{ padding: '7px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg2)', fontSize: 12, cursor: 'pointer', color: 'var(--text3)', fontFamily: 'inherit', flexShrink: 0 }}>{showKey.ai ? 'ocultar' : 'ver'}</button>
               </div>
             </Field>
             {aiIntegration && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', borderRadius: 8, background: aiIntegration.active ? '#dcfce7' : '#fee2e2', marginBottom: 16 }}>
                 <span style={{ fontSize: 13, color: aiIntegration.active ? '#166534' : '#991b1b' }}>
-                  {aiIntegration.active ? `✓ IA conectada — ${aiIntegration.type} / ${aiIntegration.config_json?.model || ''}` : '✗ IA com problema de conexão'}
+                  {aiIntegration.active ? 'IA conectada - ' + aiIntegration.type + ' / ' + (aiIntegration.config_json?.model || '') : 'IA com problema de conexao'}
                 </span>
               </div>
             )}
@@ -299,4 +299,117 @@ export default function ConfigPage() {
           <>
             <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 3 }}>Agenda</h3>
             <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 20 }}>Sistema de agendamento integrado ao Sirius</p>
-            <div style={{ padding: 16, border: '1px solid var(--border)', bo
+            <div style={{ padding: 16, border: '1px solid var(--border)', borderRadius: 10, background: 'var(--bg3)', marginBottom: 16 }}>
+              <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Sincronizacao com Google Agenda</p>
+              <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 10 }}>Cada profissional pode conectar sua propria conta Google na aba Admin.</p>
+              <button style={{ padding: '7px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg2)', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>Conectar com Google (OAuth2)</button>
+            </div>
+          </>
+        )}
+
+        {/* 4: Permissoes */}
+        {nav === 4 && (
+          <>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 3 }}>Perfis de Permissao</h3>
+            <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 20 }}>Crie perfis com acesso personalizado por modulo e atribua a membros da equipe.</p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 16 }}>
+              {/* List */}
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '.4px', marginBottom: 8 }}>Perfis</div>
+                {profiles.map(p => (
+                  <div key={p.id} onClick={() => selectProfile(p)} style={{
+                    padding: '8px 10px', borderRadius: 8, marginBottom: 4, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    background: selectedProfile?.id === p.id ? 'var(--brand-light)' : 'var(--bg3)',
+                    border: '1px solid ' + (selectedProfile?.id === p.id ? 'var(--brand)' : 'var(--border)'),
+                  }}>
+                    <span style={{ fontSize: 13, fontWeight: 500, color: selectedProfile?.id === p.id ? 'var(--brand)' : 'var(--text1)' }}>{p.name}</span>
+                    <button onClick={e => { e.stopPropagation(); deleteProfile(p.id) }} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 12, color: 'var(--text3)', padding: '0 2px' }}>x</button>
+                  </div>
+                ))}
+                <button onClick={() => selectProfile(null)} style={{
+                  width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px dashed var(--border)', background: 'none', cursor: 'pointer',
+                  fontSize: 12, color: 'var(--brand)', fontFamily: 'inherit', marginTop: 4,
+                }}>
+                  + Novo perfil
+                </button>
+              </div>
+
+              {/* Form */}
+              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: 18 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 14 }}>
+                  {selectedProfile ? 'Editando: ' + selectedProfile.name : 'Novo perfil'}
+                </div>
+                <Field label="Nome do perfil">
+                  <Input value={profileForm.name} onChange={e => setProfileForm(p => ({ ...p, name: e.target.value }))} placeholder="Ex: Atendente Padrao" />
+                </Field>
+
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '.4px', marginBottom: 10 }}>Modulos e permissoes</div>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+                  <thead>
+                    <tr style={{ color: 'var(--text3)' }}>
+                      <th style={{ textAlign: 'left', padding: '4px 8px', fontWeight: 600 }}>Modulo</th>
+                      <th style={{ padding: '4px 16px', fontWeight: 600 }}>Visualizar</th>
+                      <th style={{ padding: '4px 16px', fontWeight: 600 }}>Editar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {MODULES.map(m => (
+                      <tr key={m.key} style={{ borderTop: '1px solid var(--border)' }}>
+                        <td style={{ padding: '8px 8px', fontWeight: 500 }}>{m.label}</td>
+                        <td style={{ textAlign: 'center', padding: '8px 16px' }}>
+                          <input type="checkbox" checked={!!profileForm.permissions[m.key]?.view}
+                            onChange={() => togglePerm(m.key, 'view')}
+                            style={{ width: 16, height: 16, cursor: 'pointer', accentColor: 'var(--brand)' }} />
+                        </td>
+                        <td style={{ textAlign: 'center', padding: '8px 16px' }}>
+                          <input type="checkbox" checked={!!profileForm.permissions[m.key]?.edit}
+                            onChange={() => togglePerm(m.key, 'edit')}
+                            style={{ width: 16, height: 16, cursor: 'pointer', accentColor: 'var(--brand)' }} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>
+                  <SaveBtn onClick={saveProfile} label={profSaving ? 'Salvando...' : (selectedProfile ? 'Salvar alteracoes' : 'Criar perfil')} disabled={profSaving} />
+                  {selectedProfile && (
+                    <button onClick={() => selectProfile(null)} style={{ padding: '9px 14px', border: '1px solid var(--border)', borderRadius: 8, background: 'var(--bg2)', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', marginTop: 8, color: 'var(--text2)' }}>
+                      Cancelar
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* 5: Notificacoes */}
+        {nav === 5 && (
+          <>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 3 }}>Notificacoes</h3>
+            <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 20 }}>Alertas por e-mail e relatorios automaticos</p>
+            <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: 14, marginBottom: 14 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>Alertar ticket sem atendente</div>
+              <div style={{ fontSize: 11, color: 'var(--text3)' }}>Recebe alerta quando ticket aguarda tempo determinado</div>
+            </div>
+            <SaveBtn onClick={() => alert('Preferencias salvas!')} />
+          </>
+        )}
+
+        {/* 6: Webhooks */}
+        {nav === 6 && (
+          <>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 3 }}>Webhooks de saida</h3>
+            <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 20 }}>Envio de eventos para sistemas externos</p>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: 20, textAlign: 'center', color: 'var(--text3)', fontSize: 13 }}>
+              <p style={{ marginBottom: 12 }}>Nenhum webhook configurado</p>
+              <button style={{ padding: '8px 16px', background: 'var(--brand)', color: '#fff', border: 'none', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>+ Adicionar webhook</button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}

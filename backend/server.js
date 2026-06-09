@@ -20,6 +20,9 @@ fastify.register(require('./src/routes/users'),        { prefix: '/users' })
 fastify.register(require('./src/routes/integrations'), { prefix: '/integrations' })
 fastify.register(require('./src/routes/appointments'), { prefix: '/appointments' })
 fastify.register(require('./src/routes/admin'),        { prefix: '/admin' })
+fastify.register(require('./src/routes/permissions'),  { prefix: '/permissions' })
+fastify.register(require('./src/routes/items'),        { prefix: '/items' })
+fastify.register(require('./src/routes/superadmin'),   { prefix: '/superadmin' })
 
 // ── Health check ──────────────────────────────────────────────────────────────
 fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString() }))
@@ -27,8 +30,7 @@ fastify.get('/health', async () => ({ status: 'ok', ts: new Date().toISOString()
 // ── Start ─────────────────────────────────────────────────────────────────────
 const start = async () => {
   try {
-    await fastify.listen({ port: Number(process.env.PORT) || 3001, host: '0.0.0.0' })
-    console.log(`Sirius API rodando na porta ${process.env.PORT || 3001}`)
+    await fastify.listen({ port: process.env.PORT || 3001, host: '0.0.0.0' })
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)

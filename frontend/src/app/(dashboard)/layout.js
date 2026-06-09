@@ -108,4 +108,8 @@ function SiriusLogo({ size = 28 }) {
         <filter id="gnav"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
       <path d="M14 2C14 2 15.2 10 22 14C15.2 18 14 26 14 26C14 26 12.8 18 6 14C12.8 10 14 2 14 2Z" fill="url(#lgnav)" filter="url(#gnav)"/>
-      <circle cx="20"
+      <circle cx="20" cy="5" r="1.2" fill="#7dd3fc" opacity="0.9"/>
+          <circle cx="14" cy="14" r="2.5" fill="white" opacity="0.95" filter="url(#gnav)"/>
+    </svg>
+    )
+}

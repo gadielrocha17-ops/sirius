@@ -8,6 +8,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [view, setView] = useState('login') // 'login' | 'forgot'
+  const [forgotEmail, setForgotEmail] = useState('')
+  const [forgotSent, setForgotSent] = useState(false)
+  const [forgotLoading, setForgotLoading] = useState(false)
   const router = useRouter()
 
   async function handleLogin(e) {
@@ -24,6 +28,28 @@ export default function LoginPage() {
     }
   }
 
+  async function handleForgotPassword(e) {
+    e.preventDefault()
+    setForgotLoading(true)
+    const supabase = getSupabase()
+    await supabase.auth.resetPasswordForEmail(forgotEmail, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    setForgotLoading(false)
+    setForgotSent(true)
+  }
+
+  const inputStyle = {
+    width: '100%', padding: '9px 12px', border: '1px solid var(--border)',
+    borderRadius: 8, fontSize: 13, outline: 'none',
+    background: 'var(--bg2)', color: 'var(--text1)', fontFamily: 'inherit',
+    boxSizing: 'border-box',
+  }
+  const labelStyle = {
+    display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text3)',
+    textTransform: 'uppercase', letterSpacing: '.4px', marginBottom: 5,
+  }
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
       <div style={{ width: 380, background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 16, padding: 36, boxShadow: '0 4px 24px rgba(0,0,0,.07)' }}>
@@ -35,63 +61,48 @@ export default function LoginPage() {
           </span>
         </div>
 
-        <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Bem-vindo de volta</h2>
-        <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 24 }}>Entre com sua conta para acessar a plataforma</p>
+        {view === 'login' ? (
+          <>
+            <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Bem-vindo de volta</h2>
+            <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 24 }}>Entre com sua conta para acessar a plataforma</p>
 
-        <form onSubmit={handleLogin}>
-          <div style={{ marginBottom: 14 }}>
-            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '.4px', marginBottom: 5 }}>E-mail</label>
-            <input
-              type="email" value={email} onChange={e => setEmail(e.target.value)} required
-              placeholder="seu@email.com"
-              style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border)', borderRadius: 8, fontSize: 13, outline: 'none', background: 'var(--bg2)', color: 'var(--text1)', fontFamily: 'inherit' }}
-            />
-          </div>
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '.4px', marginBottom: 5 }}>Senha</label>
-            <input
-              type="password" value={password} onChange={e => setPassword(e.target.value)} required
-              placeholder="••••••••"
-              style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border)', borderRadius: 8, fontSize: 13, outline: 'none', background: 'var(--bg2)', color: 'var(--text1)', fontFamily: 'inherit' }}
-            />
-          </div>
+            <form onSubmit={handleLogin}>
+              <div style={{ marginBottom: 14 }}>
+                <label style={labelStyle}>E-mail</label>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
+                  placeholder="seu@email.com" style={inputStyle} />
+              </div>
+              <div style={{ marginBottom: 8 }}>
+                <label style={labelStyle}>Senha</label>
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
+                  placeholder="••••••••" style={inputStyle} />
+              </div>
 
-          {error && (
-            <div style={{ background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: '#991b1b', marginBottom: 14 }}>
-              {error}
-            </div>
-          )}
+              <div style={{ textAlign: 'right', marginBottom: 18 }}>
+                <button type="button" onClick={() => { setView('forgot'); setError('') }}
+                  style={{ background: 'none', border: 'none', color: 'var(--brand)', fontSize: 12, cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}>
+                  Esqueci a senha
+                </button>
+              </div>
 
-          <button type="submit" disabled={loading}
-            style={{ width: '100%', padding: '10px', background: loading ? 'var(--border2)' : 'var(--brand)', color: '#fff', border: 'none', borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit', transition: '.15s' }}>
-            {loading ? 'Entrando…' : 'Entrar'}
-          </button>
-        </form>
+              {error && (
+                <div style={{ background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: '#991b1b', marginBottom: 14 }}>
+                  {error}
+                </div>
+              )}
 
-        <p style={{ marginTop: 20, fontSize: 11, color: 'var(--text3)', textAlign: 'center' }}>
-          Problemas para acessar? Entre em contato com o administrador.
-        </p>
-      </div>
-    </div>
-  )
-}
+              <button type="submit" disabled={loading}
+                style={{ width: '100%', padding: 10, background: loading ? 'var(--border2)' : 'var(--brand)', color: '#fff', border: 'none', borderRadius: 9, fontSize: 14, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>
+                {loading ? 'Entrando…' : 'Entrar'}
+              </button>
+            </form>
+          </>
+        ) : (
+          <>
+            <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Recuperar senha</h2>
+            <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 24 }}>
+              Informe seu e-mail e enviaremos um link para criar uma nova senha.
+            </p>
 
-function SiriusLogo({ size = 28 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none">
-      <defs>
-        <linearGradient id="lg1" x1="0" y1="14" x2="28" y2="14" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#1a6ef5"/>
-          <stop offset="50%" stopColor="#38bfff"/>
-          <stop offset="100%" stopColor="#ffffff"/>
-        </linearGradient>
-        <filter id="glow2"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
-      <path d="M14 2C14 2 15.2 10 22 14C15.2 18 14 26 14 26C14 26 12.8 18 6 14C12.8 10 14 2 14 2Z" fill="url(#lg1)" filter="url(#glow2)"/>
-      <circle cx="20" cy="5" r="1.2" fill="#7dd3fc" opacity="0.9"/>
-      <circle cx="24" cy="9" r="0.8" fill="#bae6fd" opacity="0.7"/>
-      <circle cx="6" cy="7" r="0.8" fill="#60a5fa" opacity="0.6"/>
-      <circle cx="14" cy="14" r="2.5" fill="white" opacity="0.95" filter="url(#glow2)"/>
-    </svg>
-  )
-}
+            {forgotSent ? (
+              <div style={{ background: '#d1fae5', border: '1px solid #6ee7b7', borderRadius: 8, padding: '1
